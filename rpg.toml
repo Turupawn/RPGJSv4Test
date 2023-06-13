@@ -4,8 +4,12 @@ modules = [
     './main',
     '@rpgjs/mobile-gui',
     '@rpgjs/default-gui',
-    '@rpgjs/gamepad'
+    '@rpgjs/gamepad',
+    './title-screen'
 ]
+
+[titleScreen]
+  mongodb = 'mongodb://localhost:27017/test'
 
 [start]
     map = 'simplemap'
