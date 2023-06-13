@@ -4,8 +4,7 @@ modules = [
     './main',
     '@rpgjs/mobile-gui',
     '@rpgjs/default-gui',
-    '@rpgjs/gamepad',
-    './title-screen'
+    '@rpgjs/gamepad'
 ]
 
 [titleScreen]
