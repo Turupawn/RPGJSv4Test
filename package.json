@@ -16,7 +16,8 @@
         "@rpgjs/server": "4.0.0-beta.12",
         "@rpgjs/standalone": "4.0.0-beta.12",
         "@rpgjs/types": "4.0.0-beta.12",
-        "socket.io-client": "4.6.1"
+        "socket.io-client": "4.6.1",
+        "web3": "^4.0.1"
     },
     "devDependencies": {
         "@rpgjs/compiler": "4.0.0-beta.12",

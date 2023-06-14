@@ -1,18 +1,24 @@
 <template>
   <div class="background">
-      <div class="title" v-if="step == 'title'">
+      <div class="title">
           <h1>{{ title }}</h1>
       </div>
       <div v-if="!isMMO" class="full" :class="`step-${step}`">
           <rpg-window 
+        width="350px" 
+        position="top" 
+        class="top" 
+        >
+          <p>{{ walletText }}</p>
+        </rpg-window>
+
+          <rpg-window 
         width="200px" 
         position="bottom-middle" 
         class="margin-bottom" 
-        v-if="step == 'title'"
         >
           <rpg-choice :choices="menuChoice" @selected="selected"></rpg-choice>
         </rpg-window>
-        <rpg-load v-else></rpg-load>
     </div>
     <rpg-login v-else class="margin-bottom"></rpg-login>
   </div>
@@ -20,6 +26,7 @@
 
 <script lang="ts">
 import { Control } from '@rpgjs/client'
+import Web3 from 'web3'
 
 // @ts-ignore
 const isMMORPG = import.meta.env.VITE_RPG_TYPE == 'mmorpg'
@@ -32,12 +39,13 @@ export default {
     data() {
         return {
             menu: [
-                { text:  'Start Game', value: 'start' },
-                { text: 'Load Game', value: 'load' },
-                { text: 'Options', value: 'options' }
+                { text:  'Connect Wallet', value: 'connect', visible: false },
+                { text: 'Start Game', value: 'start', visible: true }
             ],
             step: 'title',
-            title: ''
+            title: 'Web3 MMO',
+            connected: false,
+            walletText: 'Please connect your wallet.'
         }
     },
     mounted() {
@@ -59,18 +67,30 @@ export default {
         this.obsKeyPress.unsubscribe()
     },
     methods: {
-        selected(index) {
-            const { value } = this.menu[index]
-            switch (value) {
+        selected(visibleIndex) {
+            var selectedValue = null
+            var arrayIndex = 0
+            for(var i=0;i<this.menu.length;i++)
+            {
+                if(visibleIndex == arrayIndex)
+                    selectedValue = this.menu[i].value
+                if(this.menu[i].visible == true)
+                    arrayIndex+=1
+            }
+            switch (selectedValue) {
+                case 'connect':
+                    if (window.ethereum) { // first we check if metamask is installed
+                        window.ethereum.request({ method: 'eth_requestAccounts' })
+                        .then((accounts) => {
+                            this.walletText = "Welcome " + accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
+                            this.connected = true;
+                        });
+                    }
+                    this.step = 'connected'
+                    break
                 case 'start':
+                    console.log("asdf")
                     this.rpgGuiInteraction('rpg-title-screen', 'start-game')
-                    break
-                case 'load':
-                    this.step = 'load'
-                    break
-                case 'options':
-                    this.rpgGui.hide(name)
-                    this.rpgGui.display('rpg-options')
                     break
             }
         }
@@ -78,17 +98,17 @@ export default {
     computed: {
         menuChoice() {
             return this.menu.filter(menu => {
-                if (menu.value == 'load' && !this.rpgGui.exists('rpg-load')) {
+                if (menu.value == 'connect' && this.step != 'title') {
+                    menu.visible = false
                     return false
                 }
-                else if (menu.value == 'options' && !this.rpgGui.exists('rpg-options')) {
+                else if (menu.value == 'start' && this.step != 'connected') {
+                    menu.visible = false
                     return false
                 }
+                menu.visible = true
                 return true
             })
-        },
-        isMMO() {
-            return isMMORPG
         }
     }
 }
@@ -136,6 +156,10 @@ $title-screen-background: url('./assets/default.png') !default;
 }
 
 .step-title {
+    display: flex;
+}
+
+.step-connected {
     display: flex;
 }
 </style>
