@@ -89,7 +89,6 @@ export default {
                     this.step = 'connected'
                     break
                 case 'start':
-                    console.log("asdf")
                     this.rpgGuiInteraction('rpg-title-screen', 'start-game')
                     break
             }
