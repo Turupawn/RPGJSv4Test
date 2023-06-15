@@ -54,10 +54,10 @@ export default {
 .tooltip-item::after {
 	content: '';
 	position: absolute;
-	width: 360px;
+	width: 560px;
 	height: 20px;
 	bottom: 100%;
-	left: 50%;
+	left: 100%;
 	pointer-events: none;
 	transform: translateX(-50%);
 }
