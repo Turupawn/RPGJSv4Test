@@ -18,8 +18,8 @@ import revealTooltip from './gui/reveal-tooltip.vue'
     scenes: {
         map: {
             onAfterLoading() {
-                RpgGui.display('commit-tooltip')
                 RpgGui.display('reveal-tooltip')
+                RpgGui.display('commit-tooltip')
             }
         }
     },

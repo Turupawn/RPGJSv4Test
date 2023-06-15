@@ -2,9 +2,8 @@
 	<span class="tooltip tooltip-effect" :class="{ hover }">
 		<span class="tooltip-item"></span>
 			<span class="tooltip-content clearfix">
+				<p>Reveal</p>
 				<img :src="image" /><span class="tooltip-text">
-					<h2>{{ name }}</h2> By {{ ownerName }}
-					<a :href="permalink">See in OpenSea</a>
 			</span>
 		</span>
 	</span>

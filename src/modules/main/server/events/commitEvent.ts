@@ -12,8 +12,8 @@ export class CommitEvent extends RpgEvent {
         this.setGraphic('commitCharacter')
     }
     async onAction(player: RpgPlayer) {
-        player.hideAttachedGui()
-        player.gui('commit-tooltip').open()
-        player.showAttachedGui()
+        this.gui('commit-tooltip').open()
+        player.showAttachedGui([this])
+        player.setVariable('commitEvent', this)
     }
 } 

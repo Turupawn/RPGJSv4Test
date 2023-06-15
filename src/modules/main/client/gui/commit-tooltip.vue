@@ -2,10 +2,9 @@
 	<span class="tooltip tooltip-effect" :class="{ hover }">
 		<span class="tooltip-item"></span>
 			<span class="tooltip-content clearfix">
-				<img :src="image" /><span class="tooltip-text">
-					<h2>{{ name }}</h2> By {{ ownerName }}
-					<a :href="permalink">See in OpenSea</a>
-			</span>
+				<span class="tooltip-text">
+					Commit
+				</span>
 		</span>
 	</span>
 </template>
@@ -34,6 +33,7 @@ export default {
     this.ownerName = ""
     this.permalink = item.permalink
     const sprite = this.rpgScene().getSprite(this.spriteData.id)
+    console.log("data:")
     console.log(sprite)
     setTimeout(() => { this.hover = true }, 100)
   },
