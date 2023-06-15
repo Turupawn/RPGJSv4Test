@@ -12,10 +12,8 @@ export class RevealEvent extends RpgEvent {
         this.setGraphic('revealCharacter')
     }
     async onAction(player: RpgPlayer) {
-        console.log("golas")
         this.gui('reveal-tooltip').open()
         player.showAttachedGui([this])
-        this.gui('reveal-tooltip').close()
         player.setVariable('revealEvent', this)
     }
 } 
