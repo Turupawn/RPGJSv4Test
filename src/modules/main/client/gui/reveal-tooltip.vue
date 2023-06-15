@@ -3,13 +3,23 @@
 		<span class="tooltip-item"></span>
 			<span class="tooltip-content clearfix">
 			<span class="tooltip-text">
-				<label for="commitCeremonyId">Commit Id:</label>
+				<h3>Commit</h3>
+				<label for="commitCeremonyId">Ceremony Id:</label>
 				<input type="text" id="commitCeremonyId" v-model="commitCeremonyId">
 				<br>
 				<label for="commitSecret">Secret:</label>
 				<input type="text" id="commitSecret" v-model="commitSecret">
 				<br>
 				<button @click="onCommit">Commit</button>
+				<br>
+				<h3>Reveal</h3>
+				<label for="revealCeremonyId">Ceremony Id:</label>
+				<input type="text" id="revealCeremonyId" v-model="revealCeremonyId">
+				<br>
+				<label for="revealSecret">Secret:</label>
+				<input type="text" id="revealSecret" v-model="revealSecret">
+				<br>
+				<button @click="onReveal">Reveal</button>
 			</span>
 		</span>
 	</span>
@@ -52,8 +62,26 @@ export default {
 		  var stakeAmount = ceremony[7]
 		  var valueSent = parseInt(ticketPrice) + parseInt(stakeAmount)
 		  // Send tx
+		  console.log(secretCommit)
+		  console.log(accounts[0], this.commitCeremonyId, hashedValue)
 		  contract.methods.commit(accounts[0], this.commitCeremonyId, hashedValue)
-		  	.send({ from: accounts[0], gas: 0, value: valueSent })
+		  	.send({ from: accounts[0], gas: 0, value: valueSent, gasLimit:500000, gasPrice:600000000 })
+	  },
+		async onReveal() {
+		  // Init stuff (TODO: move this to state)
+		  let web3 = new Web3(window.ethereum);
+		  let accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+		  let contractAddress = '0xa5e742b4aCCD558F2D17555E4387099f6D4261cC';
+		  let abi = JSON.parse(`[{"inputs":[{"internalType":"address","name":"randomnessCeremonyAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"ceremonies","outputs":[{"internalType":"uint256","name":"randomnessCeremonyId","type":"uint256"},{"internalType":"bool","name":"isNFTClaimed","type":"bool"},{"internalType":"bool","name":"isETHClaimed","type":"bool"},{"internalType":"bool","name":"isNFTCreatorETHClaimed","type":"bool"},{"internalType":"bool","name":"isProtocolETHClaimed","type":"bool"},{"internalType":"uint256","name":"ticketCount","type":"uint256"},{"internalType":"uint256","name":"ticketPrice","type":"uint256"},{"internalType":"uint256","name":"stakeAmount","type":"uint256"},{"internalType":"uint256","name":"nftID","type":"uint256"},{"internalType":"address","name":"nftContractAddress","type":"address"},{"internalType":"address","name":"nftCreatorAddress","type":"address"},{"internalType":"address","name":"protocolAddress","type":"address"},{"components":[{"internalType":"uint256","name":"lottoETHPercentage","type":"uint256"},{"internalType":"uint256","name":"nftCreatorETHPercentage","type":"uint256"},{"internalType":"uint256","name":"protocolETHPercentage","type":"uint256"}],"internalType":"structLottoAndNFTCeremony.Percentages","name":"percentages","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ceremonyCount","outputs":[{"internalType":"uint256","name":"_value","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"claimETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"claimNFT","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"claimNFTCreatorETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"claimProtocolETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"randomnessCeremonyId","type":"uint256"},{"internalType":"bytes32","name":"hashedValue","type":"bytes32"}],"name":"claimSlashedETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"commiter","type":"address"},{"internalType":"uint256","name":"ceremonyId","type":"uint256"},{"internalType":"bytes32","name":"hashedValue","type":"bytes32"}],"name":"commit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"commitmentDeadline","type":"uint256"},{"internalType":"uint256","name":"revealDeadline","type":"uint256"},{"internalType":"uint256","name":"ticketPrice","type":"uint256"},{"internalType":"uint256","name":"stakeAmount","type":"uint256"},{"internalType":"uint256","name":"nftID","type":"uint256"},{"internalType":"address","name":"nftContractAddress","type":"address"},{"internalType":"address","name":"nftCreatorAddress","type":"address"},{"internalType":"address","name":"protocolAddress","type":"address"},{"internalType":"uint256","name":"nftCreatorETHPercentage","type":"uint256"},{"internalType":"uint256","name":"protocolETHPercentage","type":"uint256"}],"name":"createCeremony","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"}],"name":"getRandomness","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"},{"internalType":"enumLottoAndNFTCeremony.WinnerType","name":"winnerType","type":"uint8"}],"name":"getWinner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"randomnessCeremony","outputs":[{"internalType":"contractRandomnessCeremony","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"},{"internalType":"bytes32","name":"hashedValue","type":"bytes32"},{"internalType":"bytes32","name":"secretValue","type":"bytes32"}],"name":"reveal","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"ceremonyId","type":"uint256"},{"internalType":"uint256","name":"ticketId","type":"uint256"}],"name":"tickets","outputs":[{"internalType":"address","name":"ticketOwner","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]`);
+		  let contract = new web3.eth.Contract(abi, contractAddress)
+		  // Prepare contract params
+		  var secretReveal = web3.utils.asciiToHex(this.revealSecret)
+		  secretReveal = secretReveal.slice(0, 2) + "0".repeat(64-secretReveal.length+2) + secretReveal.slice(2)
+		  var hashedValue = web3.utils.soliditySha3({ type: 'bytes32', value: secretReveal})
+		  console.log(this.revealCeremonyId, hashedValue, secretReveal)
+		  // Send tx
+		  contract.methods.reveal(this.revealCeremonyId, hashedValue, secretReveal)
+		  	.send({ from: accounts[0], gas: 0, value: 0, gasLimit:30000, gasLimit:500000, gasPrice:600000000 })
 	  }
   },
 };
