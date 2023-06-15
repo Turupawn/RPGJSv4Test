@@ -10,7 +10,8 @@ export const player: RpgPlayerHooks = {
     },
     onInput(player: RpgPlayer, { input }) {
         if (input == Control.Back) {
-            player.callMainMenu()
+            player.hideAttachedGui()
+            //player.callMainMenu()
         }
     },
     async onJoinMap(player: RpgPlayer) {

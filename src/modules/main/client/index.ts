@@ -12,14 +12,14 @@ import revealTooltip from './gui/reveal-tooltip.vue'
         RevealCharacter
     ],
     gui: [
-        revealTooltip,
-        commitTooltip
+        commitTooltip,
+        revealTooltip
     ],
     scenes: {
         map: {
             onAfterLoading() {
-                RpgGui.display('reveal-tooltip')
                 RpgGui.display('commit-tooltip')
+                RpgGui.display('reveal-tooltip')
             }
         }
     },

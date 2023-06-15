@@ -12,6 +12,7 @@ export class RevealEvent extends RpgEvent {
         this.setGraphic('revealCharacter')
     }
     async onAction(player: RpgPlayer) {
+        player.hideAttachedGui()
         player.gui('reveal-tooltip').open()
         player.showAttachedGui()
     }
