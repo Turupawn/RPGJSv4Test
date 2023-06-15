@@ -27,6 +27,13 @@
 <script lang="ts">
 import { Control } from '@rpgjs/client'
 import Web3 from 'web3'
+import { MetaMaskInpageProvider } from "@metamask/providers"
+
+declare global {
+    interface Window {
+        ethereum?: MetaMaskInpageProvider
+    }
+}
 
 // @ts-ignore
 const isMMORPG = import.meta.env.VITE_RPG_TYPE == 'mmorpg'
@@ -45,7 +52,8 @@ export default {
             step: 'title',
             title: 'Web3 MMO',
             connected: false,
-            walletText: 'Please connect your wallet.'
+            walletText: 'Please connect your wallet.',
+            isMMO: false // Add this line
         }
     },
     mounted() {
@@ -67,6 +75,7 @@ export default {
         this.obsKeyPress.unsubscribe()
     },
     methods: {
+        
         selected(visibleIndex) {
             var selectedValue = null
             var arrayIndex = 0
@@ -77,12 +86,14 @@ export default {
                 if(this.menu[i].visible == true)
                     arrayIndex+=1
             }
+            if (!selectedValue) return;
             switch (selectedValue) {
                 case 'connect':
                     if (window.ethereum) { // first we check if metamask is installed
                         window.ethereum.request({ method: 'eth_requestAccounts' })
                         .then((accounts) => {
-                            this.walletText = "Welcome " + accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
+                            // this.walletText = "Welcome " + accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
+                            this.walletText = "Welcome " + (accounts && accounts[0]?.slice(0, 6) + "..." + accounts[0]?.slice(-4));
                             this.connected = true;
                         });
                     }
