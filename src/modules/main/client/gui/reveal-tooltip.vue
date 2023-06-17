@@ -76,11 +76,13 @@ export default {
 		  let contract = new web3.eth.Contract(abi, contractAddress)
 		  // Prepare contract params
 		  var secretReveal = web3.utils.asciiToHex(this.revealSecret)
-		  secretReveal = secretReveal.slice(0, 2) + "0".repeat(64-secretReveal.length+2) + secretReveal.slice(2)
-		  var hashedValue = web3.utils.soliditySha3({ type: 'bytes32', value: secretReveal})
-		  console.log(this.revealCeremonyId, hashedValue, secretReveal)
+		  // TODO: WTF is this conversion
+		  var secretRevealContractParam = secretReveal.slice(0, 2) + "0".repeat(64-secretReveal.length+2) + secretReveal.slice(2)
+		  var secretRevealHashParam = secretReveal.slice(0, 2) + "0".repeat(64-secretReveal.length) + secretReveal.slice(2)
+		  var hashedValue = web3.utils.soliditySha3({ type: 'bytes32', value: secretRevealHashParam})
+		  console.log(this.revealCeremonyId, hashedValue, secretRevealContractParam)
 		  // Send tx
-		  contract.methods.reveal(this.revealCeremonyId, hashedValue, secretReveal)
+		  contract.methods.reveal(this.revealCeremonyId, hashedValue, secretRevealContractParam)
 		  	.send({ from: accounts[0], gas: 0, value: 0, gasLimit:30000, gasLimit:500000, gasPrice:600000000 })
 	  }
   },
